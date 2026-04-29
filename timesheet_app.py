@@ -616,16 +616,20 @@ with tab1:
 
     df2 = pd.DataFrame(rows_t2, index=col_labels).T
 
-    def highlight_ot(df):
-        def col_style(col):
-            d = all_days[col_labels.index(col)]
-            if is_non_working(d, holiday_dates_set):
-                return ["background-color: #3d3800; color: #ffd166;"] * len(df)
-            return [""] * len(df)
-        return df.apply(col_style, axis=0)
+    def style_t2(df):
+        styles = pd.DataFrame("", index=df.index, columns=df.columns)
+        for col in df.columns:
+            try:
+                idx = col_labels.index(col)
+                d = all_days[idx]
+                if is_non_working(d, holiday_dates_set):
+                    styles[col] = "background-color: #3d3800; color: #ffd166;"
+            except ValueError:
+                pass
+        return styles
 
     st.dataframe(
-        df2.style.apply(highlight_ot),
+        df2.style.apply(style_t2, axis=None),
         use_container_width=True,
         height=220,
     )
