@@ -10,6 +10,9 @@ from openpyxl.utils import get_column_letter
 
 st.set_page_config(page_title="Timesheet Calculator", page_icon="🕐", layout="wide", initial_sidebar_state="expanded")
 
+# Force dark mode
+st._config.set_option("theme.base", "dark")
+
 st.markdown("""
 <style>
 @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@300;400;600;700&display=swap');
