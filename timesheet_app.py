@@ -546,15 +546,22 @@ with tab1:
         )
         return styles
 
+    def style_t1(df):
+        styles = pd.DataFrame("", index=df.index, columns=df.columns)
+        for col in df.columns:
+            try:
+                idx = col_labels.index(col)
+                d = all_days[idx]
+                if is_non_working(d, holiday_dates_set):
+                    styles[col] = "background-color: #3d3800; color: #ffd166;"
+            except ValueError:
+                pass
+        for col in df.columns:
+            styles.loc["── TOTAL ──", col] += " font-weight: bold;"
+        return styles
+
     st.dataframe(
-        df1.style.apply(lambda _: [
-            "background-color: #3d3800; color: #ffd166;"
-            if is_non_working(all_days[col_labels.index(c)], holiday_dates_set) else ""
-            for c in df1.columns
-        ], axis=None).apply(
-            lambda row: ["font-weight: bold; border-top: 2px solid #4f9eff;" if row.name == "── TOTAL ──" else "" for _ in row],
-            axis=1
-        ),
+        df1.style.apply(style_t1, axis=None),
         use_container_width=True,
         height=280,
     )
